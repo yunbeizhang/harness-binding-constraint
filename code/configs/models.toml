@@ -1,0 +1,40 @@
+# EvalHarness model configs.
+#
+# Temperature policy:
+#   - For Kimi/GLM: keep thinking disabled and use the final-run defaults below.
+#   - For OpenAI GPT-5 series (gpt-5, gpt-5.4, ...): DO NOT set `temperature`.
+#     GPT-5 is a reasoning model and the Responses API rejects the parameter
+#     with a 400 error. Temperature is fixed at the model's internal default
+#     (~1.0); we cannot make GPT-5 fully deterministic from the client side.
+
+[models.gpt_5_4]
+provider = "openai"
+model = "gpt-5.4"
+api_key_env = "OPENAI_API_KEY"
+max_output_tokens = 4096
+timeout_sec = 180
+# IMPORTANT:
+# - Do NOT set `temperature` — GPT-5 Responses API rejects it (see file header).
+# - Do NOT set `reasoning_effort` — it breaks tool-call-style output.
+# Accept that each call has model-level nondeterminism.
+
+[models.kimi_k2_6]
+provider = "kimi"
+model = "kimi-k2.6"
+api_key_env = "KIMI_API_KEY"
+base_url = "https://api.moonshot.ai/v1"
+thinking_mode = "disabled"
+max_output_tokens = 4096
+timeout_sec = 180
+# Keep thinking disabled to match the earlier K2.5 setup and reduce cost/latency
+# during harness comparisons.
+
+[models.glm_5_1]
+provider = "zai"
+model = "glm-5.1"
+api_key_env = "ZAI_API_KEY"
+base_url = "https://api.z.ai/api/paas/v4"
+thinking_mode = "disabled"
+max_output_tokens = 4096
+timeout_sec = 180
+# Keep thinking disabled for comparability with GPT-5.4 and Kimi K2.6 harness runs.

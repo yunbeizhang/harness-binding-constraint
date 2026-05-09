@@ -1,0 +1,33 @@
+name = "H1_minimal"
+version = "1.0"
+description = "Open-loop baseline harness. ReAct loop with no feedback mechanisms."
+
+[context]
+strategy = "append_all"
+max_tokens = 200000
+compression = "none"
+retrieval = "none"
+ordering = "chronological"
+
+[tools]
+schema_style = "verbose"
+error_format = "raw"
+max_tools_exposed = "all"
+
+[orchestration]
+max_steps = 50
+retry_on_failure = false
+step_timeout_sec = 120
+escalation_policy = "none"
+
+[verification]
+self_check = false
+output_validation = false
+anomaly_detection = false
+
+[observability]
+log_level = "minimal"
+checkpoint = false
+
+[governance]
+permission_model = "permissive"

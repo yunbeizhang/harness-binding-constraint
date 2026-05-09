@@ -1,0 +1,46 @@
+name = "H2"
+version = "2.0"
+description = "Closed-loop harness with context compression, retrieval, retry, and anti-stall guidance."
+
+[context]
+strategy = "compressed_retrieval"
+max_tokens = 32000
+compression = "summarize_old"
+compression_window = 8
+ordering = "relevance_then_recency"
+
+[context.retrieval]
+method = "bm25_top_k"
+top_k = 5
+
+[tools]
+schema_style = "minimal"
+error_format = "structured"
+max_tools_exposed = "task_relevant"
+
+[orchestration]
+max_steps = 50
+retry_on_failure = true
+step_timeout_sec = 120
+# "continue": tool errors are fed back to the model as observations so it
+# can recover on the next step, instead of aborting the trajectory. The
+# retry logic below still kicks in on retryable errors.
+escalation_policy = "continue"
+
+[orchestration.retry]
+max_attempts = 3
+strategy = "exponential_backoff"
+base_delay_sec = 1.0
+retryable_errors = ["timeout", "rate_limit", "transient_network"]
+
+[verification]
+self_check = false
+output_validation = "schema_only"
+anomaly_detection = false
+
+[observability]
+log_level = "trajectory"
+checkpoint = false
+
+[governance]
+permission_model = "permissive"

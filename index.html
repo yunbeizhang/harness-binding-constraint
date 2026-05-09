@@ -1,0 +1,514 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Stop Comparing LLM Agents Without Disclosing the Harness</title>
+    <meta
+      name="description"
+      content="Position paper arguing that execution harnesses are a binding constraint in long-horizon LLM-agent evaluation."
+    >
+    <style>
+      :root {
+        color-scheme: light;
+        --ink: #161616;
+        --muted: #595959;
+        --line: #d8d2c8;
+        --paper: #fbfaf7;
+        --panel: #ffffff;
+        --accent: #7a0000;
+        --accent-strong: #4f0000;
+        --blue: #174c62;
+        --green: #2e6046;
+        --shadow: 0 18px 46px rgba(36, 27, 18, 0.11);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        margin: 0;
+        background: var(--paper);
+        color: var(--ink);
+        font-family:
+          Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+          "Segoe UI", sans-serif;
+        line-height: 1.6;
+      }
+
+      a {
+        color: inherit;
+      }
+
+      .shell {
+        width: min(1280px, calc(100% - 40px));
+        margin: 0 auto;
+      }
+
+      .topbar {
+        position: sticky;
+        top: 0;
+        z-index: 20;
+        border-bottom: 1px solid rgba(122, 0, 0, 0.14);
+        background: rgba(251, 250, 247, 0.92);
+        backdrop-filter: blur(14px);
+      }
+
+      .topbar-inner {
+        display: flex;
+        min-height: 64px;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+      }
+
+      .mark {
+        color: var(--accent);
+        font-weight: 800;
+        letter-spacing: 0;
+        text-decoration: none;
+      }
+
+      nav {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+        color: var(--muted);
+        font-size: 0.95rem;
+      }
+
+      nav a {
+        text-decoration: none;
+      }
+
+      nav a:hover {
+        color: var(--accent);
+      }
+
+      .hero {
+        padding: 78px 0 58px;
+      }
+
+      .hero-grid {
+        display: block;
+      }
+
+      .kicker {
+        margin: 0 0 18px;
+        color: var(--accent);
+        font-size: 0.88rem;
+        font-weight: 800;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
+
+      h1 {
+        max-width: 1280px;
+        margin: 0;
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: clamp(2.7rem, 4.6vw, 5rem);
+        line-height: 1.02;
+        letter-spacing: 0;
+      }
+
+      .title-line {
+        display: block;
+        white-space: nowrap;
+      }
+
+      .authors {
+        margin: 24px 0 0;
+        color: var(--muted);
+        font-size: 1.02rem;
+      }
+
+      .hero-copy {
+        margin: 30px 0 0;
+        max-width: 920px;
+        color: #303030;
+        font-size: clamp(1.08rem, 2vw, 1.28rem);
+      }
+
+      .actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 32px;
+      }
+
+      .button {
+        display: inline-flex;
+        min-height: 44px;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid var(--accent);
+        border-radius: 6px;
+        padding: 10px 16px;
+        font-weight: 760;
+        text-decoration: none;
+      }
+
+      .button.primary {
+        background: var(--accent);
+        color: white;
+      }
+
+      .button.secondary {
+        background: transparent;
+        color: var(--accent);
+      }
+
+      .thesis-card {
+        overflow: hidden;
+        width: 1040px;
+        max-width: 100%;
+        margin: 42px auto 0;
+        border: 1px solid rgba(122, 0, 0, 0.18);
+        border-radius: 8px;
+        background: var(--panel);
+        box-shadow: var(--shadow);
+      }
+
+      .thesis-card img {
+        display: block;
+        width: 100%;
+        height: auto;
+      }
+
+      section {
+        padding: 58px 0;
+        border-top: 1px solid rgba(122, 0, 0, 0.12);
+      }
+
+      .section-head {
+        display: grid;
+        grid-template-columns: minmax(180px, 0.4fr) minmax(0, 1fr);
+        gap: 34px;
+        align-items: start;
+      }
+
+      h2 {
+        margin: 0;
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: clamp(1.9rem, 3vw, 3rem);
+        line-height: 1.04;
+        letter-spacing: 0;
+      }
+
+      .lead {
+        margin: 0;
+        color: #2f2f2f;
+        font-size: 1.18rem;
+      }
+
+      .formula-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 16px;
+        margin-top: 28px;
+      }
+
+      .formula {
+        border: 1px solid var(--line);
+        border-left: 5px solid var(--accent);
+        border-radius: 8px;
+        background: var(--panel);
+        padding: 20px;
+      }
+
+      .formula-label {
+        margin: 0 0 8px;
+        color: var(--muted);
+        font-size: 0.92rem;
+        font-weight: 760;
+        text-transform: uppercase;
+      }
+
+      .equation {
+        margin: 0;
+        overflow-x: auto;
+        color: var(--accent-strong);
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: clamp(1.35rem, 3vw, 2rem);
+        line-height: 1.35;
+        white-space: nowrap;
+      }
+
+      .figure-wide {
+        margin-top: 28px;
+        overflow: hidden;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: var(--panel);
+        box-shadow: var(--shadow);
+      }
+
+      .figure-wide img {
+        display: block;
+        width: 100%;
+        height: auto;
+      }
+
+      .claim-list {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 16px;
+        margin-top: 28px;
+      }
+
+      .claim {
+        min-height: 220px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: var(--panel);
+        padding: 22px;
+      }
+
+      .claim h3 {
+        margin: 0 0 12px;
+        color: var(--blue);
+        font-size: 1.02rem;
+        letter-spacing: 0;
+      }
+
+      .claim p {
+        margin: 0;
+        color: var(--muted);
+      }
+
+      .closing {
+        padding-bottom: 86px;
+      }
+
+      .closing-panel {
+        border-radius: 8px;
+        background: var(--accent);
+        color: white;
+        padding: clamp(28px, 5vw, 54px);
+      }
+
+      .closing-panel h2 {
+        color: white;
+      }
+
+      .closing-panel p {
+        max-width: 900px;
+        margin: 18px 0 0;
+        color: rgba(255, 255, 255, 0.9);
+        font-size: 1.18rem;
+      }
+
+      footer {
+        padding: 28px 0 42px;
+        color: var(--muted);
+        font-size: 0.95rem;
+      }
+
+      @media (max-width: 860px) {
+        .shell {
+          width: min(100% - 28px, 1120px);
+        }
+
+        .topbar-inner {
+          align-items: flex-start;
+          flex-direction: column;
+          gap: 8px;
+          padding: 14px 0;
+        }
+
+        nav {
+          flex-wrap: wrap;
+          gap: 12px;
+        }
+
+        .hero {
+          padding-top: 50px;
+        }
+
+        .hero-grid,
+        .section-head,
+        .formula-grid,
+        .claim-list {
+          grid-template-columns: 1fr;
+        }
+
+        .title-line {
+          white-space: normal;
+        }
+
+        h1 {
+          font-size: clamp(2.15rem, 9.6vw, 4.3rem);
+        }
+
+        .thesis-card {
+          margin-top: 18px;
+        }
+
+        .claim {
+          min-height: 0;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="shell topbar-inner">
+        <a class="mark" href="#">Harness Disclosure</a>
+        <nav aria-label="Primary navigation">
+          <a href="#position">Position</a>
+          <a href="#control">Closed loop</a>
+          <a href="#thesis">Thesis</a>
+          <a href="#practice">Evaluation practice</a>
+          <a href="Stop%20Comparing%20LLM%20Agents%20Without%20Disclosing%20the%20Harness.pdf">PDF</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero" id="position">
+        <div class="shell hero-grid">
+          <div>
+            <p class="kicker">Position Paper</p>
+            <h1>
+              <span class="title-line">Stop Comparing LLM Agents</span>
+              <span class="title-line">Without Disclosing the Harness</span>
+            </h1>
+            <p class="authors">
+              Yunbei Zhang, Weijie Xu, Janet Wang, Jihun Hamm, Yingqiang Ge,
+              Chandan K. Reddy
+            </p>
+            <p class="hero-copy">
+              Long-horizon LLM-agent benchmark scores are not properties of
+              models alone. They are jointly produced by the model and the
+              execution harness that constructs context, mediates tools,
+              validates outputs, schedules recovery, and closes the feedback
+              loop around the model.
+            </p>
+            <div class="actions">
+              <a
+                class="button primary"
+                href="Stop%20Comparing%20LLM%20Agents%20Without%20Disclosing%20the%20Harness.pdf"
+              >Read the paper</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="control">
+        <div class="shell">
+          <div class="section-head">
+            <h2>From Inference to Control</h2>
+            <p class="lead">
+              The usual framing treats an agent as a model in a while-loop. The
+              closed-loop framing makes the harness the controller: stability,
+              context drift, feedback timing, tool mediation, verification, and
+              recovery are harness properties that shape long-horizon outcomes.
+            </p>
+          </div>
+          <figure class="figure-wide">
+            <img
+              src="figures/inference-to-control.png"
+              alt="A comparison between inference framing and closed-loop harness framing for LLM agents."
+            >
+          </figure>
+        </div>
+      </section>
+
+      <section id="thesis">
+        <div class="shell">
+          <div class="section-head">
+            <h2>The Binding Constraint Thesis</h2>
+            <p class="lead">
+              Once agent evaluation is treated as a closed-loop control problem,
+              harness variance becomes a quantity that must be measured. For
+              comparable frontier models on long-horizon tasks, harness
+              configuration can explain as much or more performance variance
+              than model choice.
+            </p>
+          </div>
+          <figure class="thesis-card" aria-label="The Binding Constraint Thesis">
+            <img
+              src="figures/binding-constraint-thesis.png"
+              alt="The Binding Constraint Thesis formalizes harness variance and model variance."
+            >
+          </figure>
+          <div class="formula-grid" aria-label="Harness variance and model variance">
+            <div class="formula">
+              <p class="formula-label">Harness variance</p>
+              <p class="equation">
+                HV(M) = Var<sub>H &sim; P(H)</sub>[B(M, H)]
+              </p>
+            </div>
+            <div class="formula">
+              <p class="formula-label">Model variance</p>
+              <p class="equation">
+                MV(H) = Var<sub>M &sim; P(M)</sub>[B(M, H)]
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="practice">
+        <div class="shell">
+          <div class="section-head">
+            <h2>What Should Change</h2>
+            <p class="lead">
+              Agent evaluation should make the execution harness visible. Without
+              harness disclosure, cross-model comparisons on long-horizon tasks
+              remain incomplete.
+            </p>
+          </div>
+          <div class="claim-list">
+            <article class="claim">
+              <h3>Harness Cards</h3>
+              <p>
+                Reports should disclose execution, tools, context construction,
+                scheduling, observability, verification, and governance.
+              </p>
+            </article>
+            <article class="claim">
+              <h3>Controlled Protocols</h3>
+              <p>
+                Comparisons should use a locked harness or a factorial design
+                that treats harness choice as an experimental factor.
+              </p>
+            </article>
+            <article class="claim">
+              <h3>Trajectory Metrics</h3>
+              <p>
+                Recovery rate, context retention, and control lag should be
+                reported so gains can be attributed to model, harness, or their
+                interaction.
+              </p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="closing">
+        <div class="shell">
+          <div class="closing-panel">
+            <h2>Until the harness is disclosed, the comparison is incomplete.</h2>
+            <p>
+              Long-horizon agent leaderboards should not be read as clean model
+              rankings unless the harness is specified, held fixed, or varied as
+              a measured factor.
+            </p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="shell">
+        Stop Comparing LLM Agents Without Disclosing the Harness
+      </div>
+    </footer>
+  </body>
+</html>

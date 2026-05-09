@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=69"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "evalharness"
+version = "0.1.0"
+description = "Harness-aware experiment framework for model x harness variance decomposition."
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+authors = [{ name = "EvalHarness" }]
+dependencies = []
+
+[project.scripts]
+evalharness = "evalharness.cli:main"
+
+[tool.setuptools]
+package-dir = { "" = "src" }
+
+[tool.setuptools.packages.find]
+where = ["src"]

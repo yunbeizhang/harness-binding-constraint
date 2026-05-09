@@ -1,0 +1,5 @@
+overleaf/
+.DS_Store
+Screenshot*.png
+__pycache__/
+*.py[cod]

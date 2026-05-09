@@ -1,0 +1,61 @@
+name = "H3"
+version = "2.0"
+description = "Full closed-loop harness with verification, anomaly detection, checkpointing, anti-stall guidance, and parser normalization."
+inherits = "h2_improved"
+
+[context]
+strategy = "compressed_retrieval"
+max_tokens = 32000
+compression = "summarize_old"
+compression_window = 8
+ordering = "relevance_then_recency"
+
+[context.retrieval]
+method = "bm25_top_k"
+top_k = 5
+
+[context.drift_check]
+enabled = true
+check_interval = 5
+threshold_kl = 2.0
+
+[tools]
+schema_style = "minimal"
+error_format = "structured"
+max_tools_exposed = "task_relevant"
+
+[orchestration]
+max_steps = 50
+retry_on_failure = true
+step_timeout_sec = 120
+escalation_policy = "checkpoint_rollback"
+rollback_depth = 3
+
+[orchestration.retry]
+max_attempts = 3
+strategy = "exponential_backoff"
+base_delay_sec = 1.0
+retryable_errors = ["timeout", "rate_limit", "transient_network", "malformed_output"]
+
+[verification]
+self_check = true
+output_validation = "full"
+
+[verification.anomaly_detection]
+enabled = true
+# `malformed_json` disabled: the detector applies JSON parsing to the tool
+# OBSERVATION (e.g. contents of a Python file), which naturally isn't JSON,
+# causing every step to be flagged as an anomaly. See SETUP_LOG 01:25.
+# `empty_tool_output` disabled: empty output is not a failure signal — many
+# legitimate cases return empty (search_text with no match, Python heredoc
+# that writes a file silently, git status on clean tree). Flagging these as
+# anomalies triggers spurious rollbacks that destroy successful edits.
+detectors = ["repeated_action_loop", "context_contradiction"]
+
+[observability]
+log_level = "full_trace"
+checkpoint = true
+checkpoint_retention = 10
+
+[governance]
+permission_model = "allowlist"
