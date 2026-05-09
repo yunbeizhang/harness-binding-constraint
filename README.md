@@ -1,10 +1,11 @@
 # Stop Comparing LLM Agents Without Disclosing the Harness
 
-**Position paper:** [Stop Comparing LLM Agents Without Disclosing the Harness](Stop%20Comparing%20LLM%20Agents%20Without%20Disclosing%20the%20Harness.pdf)
+<p align="center">
+  <a href="Stop%20Comparing%20LLM%20Agents%20Without%20Disclosing%20the%20Harness.pdf"><img src="https://img.shields.io/badge/Paper-PDF-7A0000?style=for-the-badge" alt="Paper PDF"></a>
+  <a href="https://yunbeizhang.github.io/harness-binding-constraint/"><img src="https://img.shields.io/badge/Project%20Page-GitHub%20Pages-174C62?style=for-the-badge" alt="Project Page"></a>
+</p>
 
 **Authors:** Yunbei Zhang, Weijie Xu, Janet Wang, Jihun Hamm, Yingqiang Ge, Chandan K. Reddy
-
-**Project page:** https://yunbeizhang.github.io/harness-binding-constraint/
 
 ## Position
 
