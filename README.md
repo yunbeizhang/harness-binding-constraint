@@ -5,7 +5,7 @@
   <a href="https://yunbeizhang.github.io/harness-binding-constraint/"><img src="https://img.shields.io/badge/Project%20Page-GitHub%20Pages-174C62?style=for-the-badge" alt="Project Page"></a>
 </p>
 
-**Authors:** Yunbei Zhang, Weijie Xu, Janet Wang, Jihun Hamm, Yingqiang Ge, Chandan K. Reddy
+**Authors:** Yunbei Zhang, Janet Wang, Yingqiang Ge, Weijie Xu, Jihun Hamm, Chandan K. Reddy
 
 ## Position
 
