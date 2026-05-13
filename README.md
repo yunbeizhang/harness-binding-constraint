@@ -2,6 +2,7 @@
 
 <p align="center">
   <a href="Stop%20Comparing%20LLM%20Agents%20Without%20Disclosing%20the%20Harness.pdf"><img src="https://img.shields.io/badge/Paper-PDF-7A0000?style=for-the-badge" alt="Paper PDF"></a>
+  <a href="https://www.preprints.org/frontend/manuscript/6e2d4fbc47e0d6b76021591865ecc8ec/download_pub"><img src="https://img.shields.io/badge/Preprint-Preprints.org-2B6CB0?style=for-the-badge&logo=googledocs&logoColor=white" alt="Preprint"></a>
   <a href="https://yunbeizhang.github.io/harness-binding-constraint/"><img src="https://img.shields.io/badge/Project%20Page-GitHub%20Pages-174C62?style=for-the-badge" alt="Project Page"></a>
 </p>
 
@@ -62,3 +63,18 @@ reports should include:
 
 Until those details are disclosed, long-horizon agent leaderboard comparisons
 should be treated as incomplete and potentially misleading.
+
+## Citation
+
+```bibtex
+@article{202605.0711,
+  doi = {10.20944/preprints202605.0711.v1},
+  url = {https://doi.org/10.20944/preprints202605.0711.v1},
+  year = 2026,
+  month = {May},
+  publisher = {Preprints},
+  author = {Yunbei Zhang and Janet Wang and Yingqiang Ge and Weijie Xu and Jihun Hamm and Chandan K. Reddy},
+  title = {Stop Comparing LLM Agents Without Disclosing the Harness},
+  journal = {Preprints}
+}
+```
