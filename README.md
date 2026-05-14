@@ -1,8 +1,8 @@
 # Stop Comparing LLM Agents Without Disclosing the Harness
 
 <p align="center">
-  <a href="Stop%20Comparing%20LLM%20Agents%20Without%20Disclosing%20the%20Harness.pdf"><img src="https://img.shields.io/badge/Paper-PDF-7A0000?style=for-the-badge" alt="Paper PDF"></a>
-  <a href="https://www.preprints.org/frontend/manuscript/6e2d4fbc47e0d6b76021591865ecc8ec/download_pub"><img src="https://img.shields.io/badge/Preprint-Preprints.org-2B6CB0?style=for-the-badge&logo=googledocs&logoColor=white" alt="Preprint"></a>
+  <a href="https://openreview.net/pdf?id=qMjgplILnv"><img src="https://img.shields.io/badge/Paper-PDF-7A0000?style=for-the-badge" alt="Paper PDF"></a>
+  <a href="https://openreview.net/pdf?id=qMjgplILnv"><img src="https://img.shields.io/badge/Preprint-OpenReview-2B6CB0?style=for-the-badge&logo=googledocs&logoColor=white" alt="OpenReview Preprint"></a>
   <a href="https://yunbeizhang.github.io/harness-binding-constraint/"><img src="https://img.shields.io/badge/Project%20Page-GitHub%20Pages-174C62?style=for-the-badge" alt="Project Page"></a>
 </p>
 
